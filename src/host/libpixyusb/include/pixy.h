@@ -69,6 +69,13 @@ extern "C"
         sprintf(buf, "sig: %d x: %d y: %d width: %d height: %d", signature, x, y, width, height);		
     }
 
+    void toString(void)
+    {
+      char buf[128];
+      print(buf);
+      printf("  %s\n", buf);
+    }
+
     uint16_t type;
     uint16_t signature;
     uint16_t x;

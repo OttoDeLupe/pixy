@@ -7,4 +7,4 @@ mkdir $TARGET_BUILD_FOLDER/hello_pixy
 
 cd $TARGET_BUILD_FOLDER/hello_pixy
 cmake ../../src/host/hello_pixy
-make
+make VERBOSE=1

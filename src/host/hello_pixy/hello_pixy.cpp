@@ -128,7 +128,7 @@ int main(int argc, char * argv[])
 
     // Get blocks from Pixy //
     blocks_copied = pixy_get_blocks(BLOCK_BUFFER_SIZE, &blocks[0]);
-
+    printf("blocks copied: %d\n", blocks_copied);
     if(blocks_copied < 0) {
       // Error: pixy_get_blocks //
       printf("pixy_get_blocks(): ");
@@ -137,7 +137,7 @@ int main(int argc, char * argv[])
 
     // Display received blocks //
     printf("frame %d:\n", i);
-    for(index = 0; index != blocks_copied; ++index) {    
+    for(index = 0; index != blocks_copied; ++index) {
        blocks[index].print(buf);
        printf("  %s\n", buf);
     }

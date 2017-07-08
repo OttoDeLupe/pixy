@@ -88,6 +88,10 @@ int PixyInterpreter::get_blocks(int max_blocks, Block * blocks)
   blocks_access_mutex_.lock();
 
   number_of_blocks_to_copy = (max_blocks >= blocks_.size() ? blocks_.size() : max_blocks);
+  if (number_of_blocks_to_copy == 0) {
+    printf ("No Blocks Available\n");
+    return 0;
+  }
   
   // Copy blocks //
   
@@ -152,6 +156,7 @@ void PixyInterpreter::interpreter_thread()
 {
   thread_dead_ = false;
   // Read from Pixy USB connection using the Chirp //
+   printf("pixyInterpreter:: interpreterThread\n");
   // protocol until we're told to stop.            //
   while(!thread_die_) {
     // Mutual exclusion for receiver_ object (Lock) //
@@ -227,7 +232,7 @@ void PixyInterpreter::interpret_CCB1(const void * CCB1_data[])
   blobs           = static_cast<const BlobA *>(CCB1_data[4]);
   
   number_of_blobs /= sizeof(BlobA) / sizeof(uint16_t);
-  
+  printf("CCB1 normal blocks %d\n", number_of_blobs);
   // Wait for permission to use blocks_ vector //
   blocks_access_mutex_.lock();
 

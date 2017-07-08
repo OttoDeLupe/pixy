@@ -874,13 +874,16 @@ int Chirp::service(bool all)
     uint8_t type;
     ChirpProc recvProc;
     void *args[CRP_MAX_ARGS+1];
-
+    log("pixydebug: Chirp::service\n");
     for (i=0; true; i++)
     {
         if (recvChirp(&type, &recvProc, args)==CRP_RES_OK)
             handleChirp(type, recvProc, (const void **)args);
-        else
+        else 
+	{
+	  log("pixydebug: recvChrip not OK\n");
             break;
+	}
         if (!all)
             break;
     }
@@ -894,7 +897,7 @@ int Chirp::recvChirp(uint8_t *type, ChirpProc *proc, void *args[], bool wait) //
     uint32_t i, offset;
 
     restoreBuffer();
-
+   log("pixydebug: recvChirp\n");
     // receive
     if (m_errorCorrected)
         res = recvFull(type, proc, wait);
@@ -1180,7 +1183,7 @@ int Chirp::recvHeader(uint8_t *type, ChirpProc *proc, bool wait)
     uint16_t crc, rcrc;
 
     int return_value;
-
+  log("pixdebug: Chrip::revHeader()\n");
     return_value = m_link->receive(&c, 1, wait?m_headerTimeout:0);
 
     if (return_value < 0) {
@@ -1255,7 +1258,7 @@ int Chirp::recvHeader(uint8_t *type, ChirpProc *proc, bool wait)
     return_value = CRP_RES_OK;
 
 chirp_recvheader__exit:
-
+  log("pixdebug: exit Chrip::revHeader()\n");
     return return_value;
 }
 
@@ -1265,6 +1268,7 @@ int Chirp::recvFull(uint8_t *type, ChirpProc *proc, bool wait)
     uint32_t startCode;
     uint32_t len, recvd;
 
+  log("pixdebug: Chrip::revFull()\n");
     // receive header, with startcode check to make sure we're synced
     while(1)
     {
@@ -1295,7 +1299,7 @@ int Chirp::recvFull(uint8_t *type, ChirpProc *proc, bool wait)
             recvd += res;
         }
     }
-
+  log("pixdebug: exit Chrip::revFull()\n");
     return CRP_RES_OK;
 }
 
@@ -1328,6 +1332,7 @@ int Chirp::recvData()
     uint16_t crc;
     uint8_t sequence, rsequence, naks;
 
+  log("pixdebug: Chrip::revData()\n");
     if (m_len+3+m_headerLen>m_bufSize && (res=realloc(m_len+3+m_headerLen))<0) // +3 to read sequence, crc
         return res;
 
@@ -1363,7 +1368,8 @@ int Chirp::recvData()
                 return CRP_RES_ERROR_MAX_NAK;
         }
     }
-    return CRP_RES_OK;
+  log("pixdebug: exit Chrip::revData()\n");    
+return CRP_RES_OK;
 }
 
 int Chirp::recvAck(bool *ack, uint16_t timeout) // false=nack

@@ -8,3 +8,7 @@
 *.jtag
 *.swp
 *.swo
+*.so
+*~
+*.a
+build/

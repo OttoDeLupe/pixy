@@ -24,7 +24,8 @@ frame  = 0
 while 1:
 
   count = pixy_get_blocks(100, blocks)
-
+  if count < 0:
+	print 'count %s' % count
   if count > 0:
     # Blocks found #
     print 'frame %3d:' % (frame)
